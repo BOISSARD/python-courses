@@ -24,21 +24,19 @@ def draw_star(t: Turtle = None, size: int = None, points: int = 5, angle: int = 
     t.pendown()
 
     angle_branches = 360/(points)
-    angle_interne = angle_branches
+    angle_interne = angle_thickness = cote_pointes_demis = None
 
     # pour travailler sur l'epaisseur de l'etoile 
     if not thickness or thickness < 0 or thickness > 1 :
         print("not thickness", angle_branches, angle_branches/30, angle_branches/(angle_branches/30))
         angle_interne = (180 - angle_branches*2)/2 if points%2 == 1 and points > 3 else angle_branches/(angle_branches/30) if points > 3 else angle_branches/(angle_branches/20)
+        angle_thickness = 180 - (angle_branches/2) - angle_interne
+        cote_pointes_demis = (rayon/math.sin(math.radians(angle_thickness))) * math.sin(math.radians(angle_branches/2))
     else :
         print("thickness", thickness)
         pass
 
     # Relis les pointes avec l'angle interne suivant l'epaisseur
-    angle_thickness = 180 - (angle_branches/2) - angle_interne
-    # print("angles centre", angle_branches/2, "angle pointe", angle_interne, "angle thickness", angle_thickness)
-    cote_pointes_demis = (rayon/math.sin(math.radians(angle_thickness))) * math.sin(math.radians(angle_branches/2))
-    # print(cote_pointes_demis)
     if fill : t.begin_fill()
     # t.right(180 - angle_interne)
     for _ in range(points):
@@ -93,7 +91,7 @@ for nb in r :
     # t.color("yellow")
     t.pen(pencolor="orange", fillcolor="yellow")
     # draw_star(t, size = size, points = nb, fill = True)
-    draw_star(t, size = size, points = nb, fill = True)
+    draw_star(t, size=size, points=nb, thickness=.5, fill=True)
     # break # TODO : Remove
     # sleep(1)
     t.penup()
